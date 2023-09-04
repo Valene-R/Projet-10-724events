@@ -8,6 +8,7 @@ const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 1000
 
 const Form = ({ onSuccess, onError }) => {
   const [sending, setSending] = useState(false);
+
   const sendContact = useCallback(
     async (evt) => {
       evt.preventDefault();
@@ -16,6 +17,7 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
+        onSuccess(); // Appelle la fonction onSuccess lorsque le contact est envoyé avec succès
       } catch (err) {
         setSending(false);
         onError(err);
@@ -23,9 +25,11 @@ const Form = ({ onSuccess, onError }) => {
     },
     [onSuccess, onError]
   );
+  
   return (
-    <form onSubmit={sendContact}>
-      <div className="row">
+    // Gère la soumission du formulaire en appelant la fonction sendContact
+    <form onSubmit={sendContact} data-testid="form"> 
+      <div className="row"> 
         <div className="col">
           <Field placeholder="" label="Nom" />
           <Field placeholder="" label="Prénom" />
@@ -37,7 +41,7 @@ const Form = ({ onSuccess, onError }) => {
             titleEmpty
           />
           <Field placeholder="" label="Email" />
-          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}>
+          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending} data-testid="button-test-id">
             {sending ? "En cours" : "Envoyer"}
           </Button>
         </div>

@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Menu from "../../containers/Menu";
 import ServiceCard from "../../components/ServiceCard";
 import EventCard from "../../components/EventCard";
@@ -12,8 +14,18 @@ import Form from "../../containers/Form";
 import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
-const Page = () => {
-  const {last} = useData()
+const Home = () => {
+  const {data} = useData() // Obtient les données à partir du contexte
+  const lastPrestation = data && data.events[data.events.length - 1]; // Obtient la dernière prestation
+
+  // État initial du message de succès, il est caché au départ
+  const [successMessageVisible, setSuccessMessageVisible] = useState(false);
+  
+  // Fonction pour afficher le message de succès
+  const showSuccessMessage = () => {
+    setSuccessMessageVisible(true);
+  };
+
   return <>
     <header>
       <Menu />
@@ -95,7 +107,7 @@ const Page = () => {
         <h2 className="Title">Contact</h2>
         <Modal
           Content={
-            <div className="ModalMessage--success">
+            <div className={`ModalMessage--success ${successMessageVisible ? "visible" : ""}`}>
               <div>Message envoyé !</div>
               <p>
                 Merci pour votre message nous tâcherons de vous répondre dans
@@ -104,10 +116,14 @@ const Page = () => {
             </div>
           }
         >
+          {/* Le composant Form est rendu dans Modal et, en cas de succès, ouvre Modal et affiche le message de succès */}
           {({ setIsOpened }) => (
             <Form
-              onSuccess={() => setIsOpened(true)}
-              onError={() => null}
+              onSuccess={() => {
+                setIsOpened(true);
+                showSuccessMessage();
+              }}
+              onError={() => null} // En cas d'erreur de soumission du formulaire ,ne rien faire
             />
           )}
         </Modal>
@@ -115,14 +131,16 @@ const Page = () => {
     </main>
     <footer className="row">
       <div className="col presta">
-        <h3>Notre derniére prestation</h3>
+        <h3>Notre dernière prestation</h3>
+        {lastPrestation && (
         <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
+          imageSrc={lastPrestation?.cover} 
+          title={lastPrestation?.title} 
+          date={new Date(lastPrestation?.date)}
           small
           label="boom"
         />
+        )}
       </div>
       <div className="col contact">
         <h3>Contactez-nous</h3>
@@ -157,4 +175,4 @@ const Page = () => {
   </>
 }
 
-export default Page;
+export default Home;
