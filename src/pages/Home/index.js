@@ -16,10 +16,17 @@ import { useData } from "../../contexts/DataContext";
 
 const Home = () => {
   const {data} = useData() // Obtient les données à partir du contexte
-  const lastPrestation = data && data.events[data.events.length - 1]; // Obtient la dernière prestation
 
   // État initial du message de succès, il est caché au départ
   const [successMessageVisible, setSuccessMessageVisible] = useState(false);
+
+  // Trie les événements par date du plus récent au plus ancien
+  const eventsSortedByDate = data && data.events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Obtient la dernière prestation après le tri
+  // Si eventsSortedByDate existe (n'est pas nulle) et contient au moins un événement,
+  // la dernière prestation se trouve à la première position (index 0) du tableau trié.
+  const lastPrestation = eventsSortedByDate && eventsSortedByDate[0];
   
   // Fonction pour afficher le message de succès
   const showSuccessMessage = () => {
