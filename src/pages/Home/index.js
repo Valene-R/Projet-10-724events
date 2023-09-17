@@ -38,7 +38,7 @@ const Home = () => {
       <Menu />
     </header>
     <main>
-      <section className="SliderContainer">
+      <section className="SliderContainer" id="nos-services">
         <Slider />
       </section>
       <section className="ServicesContainer">
@@ -70,11 +70,11 @@ const Home = () => {
           </ServiceCard>
         </div>
       </section>
-      <section className="EventsContainer">
+      <section className="EventsContainer" id="nos-realisations">
         <h2 className="Title">Nos réalisations</h2>
         <EventList />
       </section>
-      <section className="PeoplesContainer">
+      <section className="PeoplesContainer" id="notre-equipe">
         <h2 className="Title">Notre équipe</h2>
         <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
         <div className="ListContainer">
