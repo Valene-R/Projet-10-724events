@@ -1,3 +1,18 @@
 .SelectTitle {
   color: white;
 }
+
+.Pagination button {
+  cursor: pointer;
+  background-color: #5b32ff;
+  border: none;
+  color: #fff;
+}
+
+/* Affiche les numéros de page "1" et "2" et les rendre gras au survol */
+.Pagination button.active,
+.Pagination button:hover {
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}

@@ -15,10 +15,12 @@ const Select = ({
 }) => {
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
+
+  // Cette fonction est appelée lorsqu'une nouvelle valeur est sélectionnée dans la liste
   const changeValue = (newValue) => {
-    onChange();
-    setValue(newValue);
-    setCollapsed(newValue);
+    setValue(newValue); // Met à jour la valeur sélectionnée
+    setCollapsed(true); // Réduit la liste une fois une valeur sélectionnée
+    onChange(newValue); // Passe la valeur sélectionnée à la fonction onChange
   };
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
