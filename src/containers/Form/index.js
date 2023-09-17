@@ -1,14 +1,25 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import Field, { FIELD_TYPES } from "../../components/Field";
 import Select from "../../components/Select";
 import Button, { BUTTON_TYPES } from "../../components/Button";
 
-const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 1000); })
+// Fonction simulant une API de contact asynchrone avec un délai de réponse
+const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 900); })
 
 const Form = ({ onSuccess, onError }) => {
   const [sending, setSending] = useState(false);
+  // useRef est utilisé pour obtenir une référence à l'élément du formulaire
+  const formRef = useRef(null);
 
+  // Fonction pour réinitialiser le formulaire
+  const resetForm = () => {
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  };
+
+  // Fonction pour gérer la soumission du formulaire
   const sendContact = useCallback(
     async (evt) => {
       evt.preventDefault();
@@ -17,7 +28,8 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
-        onSuccess(); // Appelle la fonction onSuccess lorsque le contact est envoyé avec succès
+        onSuccess(); // Appelle la fonction onSuccess après un envoi réussi
+        resetForm(); // Réinitialise le formulaire après un envoi réussi
       } catch (err) {
         setSending(false);
         onError(err);
@@ -25,15 +37,16 @@ const Form = ({ onSuccess, onError }) => {
     },
     [onSuccess, onError]
   );
-  
+
   return (
     // Gère la soumission du formulaire en appelant la fonction sendContact
-    <form onSubmit={sendContact} data-testid="form"> 
-      <div className="row"> 
+    // La référence formRef est liée à l'élément du formulaire
+    <form onSubmit={sendContact} data-testid="form" ref={formRef}>
+      <div className="row">
         <div className="col">
           <Field placeholder="" label="Nom" />
           <Field placeholder="" label="Prénom" />
-          <Select
+          <Select 
             selection={["Personnel", "Entreprise"]}
             onChange={() => null}
             label="Personnel / Entreprise"
@@ -60,11 +73,11 @@ const Form = ({ onSuccess, onError }) => {
 Form.propTypes = {
   onError: PropTypes.func,
   onSuccess: PropTypes.func,
-}
+};
 
 Form.defaultProps = {
   onError: () => null,
   onSuccess: () => null,
-}
+};
 
 export default Form;
