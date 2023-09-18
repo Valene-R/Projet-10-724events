@@ -24,7 +24,7 @@ const Home = () => {
   const eventsSortedByDate = data && data.events.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Obtient la dernière prestation après le tri
-  // Si eventsSortedByDate existe (n'est pas nulle) et contient au moins un événement,
+  // Si eventsSortedByDate existe (n'est pas null) et contient au moins un événement,
   // la dernière prestation se trouve à la première position (index 0) du tableau trié.
   const lastPrestation = eventsSortedByDate && eventsSortedByDate[0];
   
@@ -70,11 +70,11 @@ const Home = () => {
           </ServiceCard>
         </div>
       </section>
-      <section className="EventsContainer" id="nos-realisations">
+      <section className="EventsContainer" id="nos-realisations" data-testid="events-section">
         <h2 className="Title">Nos réalisations</h2>
         <EventList />
       </section>
-      <section className="PeoplesContainer" id="notre-equipe">
+      <section className="PeoplesContainer" id="notre-equipe" data-testid="people-section">
         <h2 className="Title">Notre équipe</h2>
         <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
         <div className="ListContainer">
@@ -136,8 +136,8 @@ const Home = () => {
         </Modal>
       </div>
     </main>
-    <footer className="row">
-      <div className="col presta">
+    <footer className="row" data-testid="footer">
+      <div className="col presta" data-testid="last-event-card">
         <h3>Notre dernière prestation</h3>
         {lastPrestation && (
         <EventCard
