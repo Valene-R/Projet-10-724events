@@ -13,21 +13,23 @@ const Select = ({
   label,
   type = "normal",
 }) => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("");
   const [collapsed, setCollapsed] = useState(true);
 
   // Cette fonction est appelée lorsqu'une nouvelle valeur est sélectionnée dans la liste
   const changeValue = (newValue) => {
     setValue(newValue); // Met à jour la valeur sélectionnée
-    setCollapsed(true); // Réduit la liste une fois une valeur sélectionnée
+    setCollapsed(true); // Réduit la liste une fois la valeur sélectionnée
     onChange(newValue); // Passe la valeur sélectionnée à la fonction onChange
   };
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
-      {label && <div className="label">{label}</div>}
+      <div data-testid="select-component-testid">
+        {label && <div className="label">{label}</div>}
+      </div>
       <div className="Select">
         <ul>
-          <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
+          <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"} data-testid="all-option">
             {value || (!titleEmpty && "Toutes")}
           </li>
           {!collapsed && (
@@ -39,7 +41,7 @@ const Select = ({
                 </li>
               )}
               {selection.map((s) => (
-                <li key={s} onClick={() => changeValue(s)}>
+                <li key={s} onClick={() => changeValue(s)} data-testid={`option-${s}`}>
                   <input
                     defaultChecked={value === s}
                     name="selected"

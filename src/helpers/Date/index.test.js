@@ -16,6 +16,22 @@ describe("Date helper", () => {
         it("the function returns août for 2022-08-25 as date", () => {
             expect(getMonth(new Date("2022-08-25"))).toBe("août");
         });
+
+         // Test itératif basé sur le tableau MONTHS_DATA pour tester chaque date
+         it("returns the correct month for each date in TEST_MONTHS", () => {
+            // Définit le tableau MONTHS_DATA avec des dates et les mois correspondants
+            const MONTHS_DATA = [
+                { date: "2022-01-31", response: 'janvier' },
+                { date: "2022-02-18", response: 'février' },
+                { date: "2022-01-01", response: 'janvier' },
+            ];
+            // Pour chaque élément du tableau MONTHS_DATA
+            MONTHS_DATA.forEach(item => {
+                // Convertit la chaîne de date en objet Date
+                const date = new Date(item.date);
+                // Vérifie si le mois retourné par getMonth est correct
+                expect(getMonth(date)).toBe(item.response);
+            });
+        });
     });
 })
-

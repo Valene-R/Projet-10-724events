@@ -24,7 +24,7 @@ const Home = () => {
   const eventsSortedByDate = data && data.events.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Obtient la dernière prestation après le tri
-  // Si eventsSortedByDate existe (n'est pas null) et contient au moins un événement,
+  // Si eventsSortedByDate existe (n'est pas null, ni undefined) et contient au moins un événement,
   // la dernière prestation se trouve à la première position (index 0) du tableau trié.
   const lastPrestation = eventsSortedByDate && eventsSortedByDate[0];
   
@@ -145,7 +145,7 @@ const Home = () => {
           title={lastPrestation?.title} 
           date={new Date(lastPrestation?.date)}
           small
-          label="boom"
+          label="conférence"
         />
         )}
       </div>

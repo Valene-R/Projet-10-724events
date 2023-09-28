@@ -27,7 +27,7 @@ describe("When Form is created", () => {
 
 });
 
-
+// Tests additionnels d'intégration
 describe("When a page is created", () => {
 
   // Rend le composant Home avant chaque test
@@ -43,7 +43,7 @@ describe("When a page is created", () => {
   // Vérifie l'affichage de la liste des personnes
   it("a list a people is displayed", () => {
     const peopleSection = screen.getByTestId("people-section");
-    expect(peopleSection).toBeInTheDocument();
+    expect(peopleSection).toBeInTheDocument(); 
   })
   // Vérifie la présence du footer sur la page
   it("a footer is displayed", () => {
