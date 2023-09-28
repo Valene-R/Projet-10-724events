@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Menu from "../../containers/Menu";
 import ServiceCard from "../../components/ServiceCard";
 import EventCard from "../../components/EventCard";
@@ -12,14 +14,31 @@ import Form from "../../containers/Form";
 import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
-const Page = () => {
-  const {last} = useData()
+const Home = () => {
+  const {data} = useData() // Obtient les données à partir du contexte
+
+  // État initial du message de succès, il est caché au départ
+  const [successMessageVisible, setSuccessMessageVisible] = useState(false);
+
+  // Trie les événements par date du plus récent au plus ancien
+  const eventsSortedByDate = data && data.events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Obtient la dernière prestation après le tri
+  // Si eventsSortedByDate existe (n'est pas null, ni undefined) et contient au moins un événement,
+  // la dernière prestation se trouve à la première position (index 0) du tableau trié.
+  const lastPrestation = eventsSortedByDate && eventsSortedByDate[0];
+  
+  // Fonction pour afficher le message de succès
+  const showSuccessMessage = () => {
+    setSuccessMessageVisible(true);
+  };
+
   return <>
     <header>
       <Menu />
     </header>
     <main>
-      <section className="SliderContainer">
+      <section className="SliderContainer" id="nos-services">
         <Slider />
       </section>
       <section className="ServicesContainer">
@@ -31,31 +50,31 @@ const Page = () => {
             Une soirée d’entreprise vous permet de réunir vos équipes pour un
             moment convivial afin de valoriser votre société en projetant une
             image dynamique. Nous vous proposons d’organiser pour vous vos
-            diners et soirée d’entreprise
+            diners et soirée d’entreprise.
           </ServiceCard>
           <ServiceCard imageSrc="/images/hall-expo.png">
             <h3>Conférences</h3>
-            77 events vous propose d’organiser votre évènement, quelle que soit
+            724 events vous propose d’organiser votre évènement, quelle que soit
             sa taille, en s’adaptant à votre demande et à vos demandes. En tant
             que spécialistes de l’évènementiel, nous saurons trouver le lieu
             parfait ainsi que des solutions inédites pour capter votre audience
-            et faire de cet évènement un succès
+            et faire de cet évènement un succès.
           </ServiceCard>
           <ServiceCard imageSrc="/images/sophia-sideri-LFXMtUuAKK8-unsplash1.png">
-            <h3>Experience digitale</h3>
+            <h3>Expérience digitale</h3>
             Notre agence experte en contenus immersifs offre des services de
             conseil aux entreprises, pour l’utilisation de la réalité virtuelle,
             de la réalité augmentée et de la réalité mixte de l’animation
             événementielle, à la veille technologique jusqu’au développement de
-            module de formation innovant
+            module de formation innovant.
           </ServiceCard>
         </div>
       </section>
-      <section className="EventsContainer">
+      <section className="EventsContainer" id="nos-realisations" data-testid="events-section">
         <h2 className="Title">Nos réalisations</h2>
         <EventList />
       </section>
-      <section className="PeoplesContainer">
+      <section className="PeoplesContainer" id="notre-equipe" data-testid="people-section">
         <h2 className="Title">Notre équipe</h2>
         <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
         <div className="ListContainer">
@@ -95,40 +114,46 @@ const Page = () => {
         <h2 className="Title">Contact</h2>
         <Modal
           Content={
-            <div className="ModalMessage--success">
+            <div className={`ModalMessage--success ${successMessageVisible ? "visible" : ""}`}>
               <div>Message envoyé !</div>
               <p>
-                Merci pour votre message nous tâcherons de vous répondre dans
-                les plus brefs délais
+                Merci pour votre message. Nous tâcherons de vous répondre dans
+                les plus brefs délais.
               </p>
             </div>
           }
         >
+          {/* Le composant Form est rendu dans Modal et, en cas de succès, ouvre Modal et affiche le message de succès */}
           {({ setIsOpened }) => (
             <Form
-              onSuccess={() => setIsOpened(true)}
-              onError={() => null}
+              onSuccess={() => {
+                setIsOpened(true);
+                showSuccessMessage();
+              }}
+              onError={() => null} // En cas d'erreur de soumission du formulaire ,ne rien faire
             />
           )}
         </Modal>
       </div>
     </main>
-    <footer className="row">
-      <div className="col presta">
-        <h3>Notre derniére prestation</h3>
+    <footer className="row" data-testid="footer">
+      <div className="col presta" data-testid="last-event-card">
+        <h3>Notre dernière prestation</h3>
+        {lastPrestation && (
         <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
+          imageSrc={lastPrestation?.cover} 
+          title={lastPrestation?.title} 
+          date={new Date(lastPrestation?.date)}
           small
-          label="boom"
+          label="conférence"
         />
+        )}
       </div>
       <div className="col contact">
         <h3>Contactez-nous</h3>
         <address>45 avenue de la République, 75000 Paris</address>
         <div>01 23 45 67 89</div>
-        <div>contact@77events.com</div>
+        <div>contact@724events.com</div>
         <div>
           <a href="#twitch">
             <Icon name="twitch" />
@@ -150,11 +175,11 @@ const Page = () => {
           Une agence événementielle propose des prestations de service
           spécialisées dans la conception et l&apos;organisation de divers événements
           tels que des événements festifs, des manifestations sportives et
-          culturelles, des événements professionnels
+          culturelles, des événements professionnels.
         </p>
       </div>
     </footer>
   </>
 }
 
-export default Page;
+export default Home;

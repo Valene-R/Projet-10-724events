@@ -45,28 +45,32 @@ describe("When Events is created", () => {
         <Events />
       </DataProvider>
     );
-    await screen.findByText("avril");
+    // Ajout "expect" pour vérifier que le texte est présent dans le document
+    expect(await screen.findByText("forum")).toBeInTheDocument();  // avant "avril" mais pas dans data ci-dessus
   });
-  describe("and an error occured", () => {
+  describe("and an error occurred", () => {
     it("an error message is displayed", async () => {
-      api.loadData = jest.fn().mockRejectedValue();
+      // Utilise new Error pour créer un objet d'erreur avec le message 'some error'
+      // Simule une erreur réelle renvoyée par l'API
+      api.loadData = jest.fn().mockRejectedValue(new Error('some error'));
       render(
         <DataProvider>
           <Events />
         </DataProvider>
       );
-      expect(await screen.findByText("An error occured")).toBeInTheDocument();
+      expect(await screen.findByText("An error occurred")).toBeInTheDocument(); // Avant "occured" mais mal orthographié 
     });
   });
   describe("and we select a category", () => {
-    it.only("an filtered list is displayed", async () => {
+    it("an filtered list is displayed", async () => { // Retrait du it.only pour effectuer les autres tests
       api.loadData = jest.fn().mockReturnValue(data);
       render(
         <DataProvider>
           <Events />
         </DataProvider>
       );
-      await screen.findByText("Forum #productCON");
+      // Ajout "expect" 
+      expect(await screen.findByText("Forum #productCON")).toBeInTheDocument();
       fireEvent(
         await screen.findByTestId("collapse-button-testid"),
         new MouseEvent("click", {
@@ -81,8 +85,8 @@ describe("When Events is created", () => {
           bubbles: true,
         })
       );
-
-      await screen.findByText("Conférence #productCON");
+      // Ajout "expect"
+      expect(await screen.findByText("Conférence #productCON")).toBeInTheDocument();
       expect(screen.queryByText("Forum #productCON")).not.toBeInTheDocument();
     });
   });
@@ -103,9 +107,9 @@ describe("When Events is created", () => {
           bubbles: true,
         })
       );
-
-      await screen.findByText("24-25-26 Février");
-      await screen.findByText("1 site web dédié");
+      // Ajout "expect"
+      expect(await screen.findByText("24-25-26 Février")).toBeInTheDocument();
+      expect(await screen.findByText("1 site web dédié")).toBeInTheDocument();
     });
   });
 });
