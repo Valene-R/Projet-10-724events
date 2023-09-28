@@ -38,7 +38,7 @@ const Slider = () => {
 
   return (
     <div className="SlideCardList">
-      {/* // Parcours les événements triés par date et affiche chaque slide */}
+      {/* Parcours les événements triés par date et affiche chaque slide */}
       {byDateDesc?.map((event, idx) => (
         <div
           key={event.title}
